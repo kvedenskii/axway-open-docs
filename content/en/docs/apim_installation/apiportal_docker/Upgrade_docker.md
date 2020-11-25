@@ -1,7 +1,7 @@
 {
     "title":"Upgrade API Portal docker deployment",
     "linkTitle":"Upgrade docker deployment",
-    "draft": true,
+    "draft": "true",
     "weight":"5",
     "date":"2019-08-09",
     "description":"Upgrade your API Portal Docker deployment, preserving any API Portal customizations."
