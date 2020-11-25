@@ -15,8 +15,7 @@ The following components are required on your system before you can deploy API 
 * [Docker engine](https://docs.docker.com/engine/).
 * MySQL server.
 * API Portal Docker image, available from [Axway Support](https://support.axway.com).
-
-You will also need API Gateway and API Manager installed on-premise or in containers (see the [API Gateway Installation Guide](/docs/apim_installation/apigtw_install/)). If you plan to configure API Manager with environment variables it should be installed before you run API Portal container.
+* API Manager and API Gateway [installed](/docs/apim_installation/apigtw_install/) on-premise or in containers, if you plan to configure API Manager with environment variables.
 
 Optional components:
 
@@ -59,7 +58,7 @@ The following are the recommended hardware disk space and memory requirements fo
 
 API Portal is now running in a Docker container.
 
-In order to use API Portal, you must link it to your API Manager. For more details, see [Connect API Portal to API Manager](/docs/apim_installation/apiportal_install/connect_to_apimgr/).
+To access your API Portal, you must first link it to your API Manager. For more details, see [Connect API Portal to API Manager](/docs/apim_installation/apiportal_install/connect_to_apimgr/).
 
 ## Use environment variables to configure API Portal runtime
 
