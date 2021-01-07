@@ -78,7 +78,7 @@ docker image build -t <apiportal-image-tag> \
 
 ## Single step build
 
-In contrast with the [2 steps build](#2-steps-build), **single step build** process happens in one command and produces only 1 tagged image.
+In contrast with the [2-steps build](#2-steps-build), **single step build** process happens in one command and produces only 1 tagged image. It's nothing more than both steps from [2-steps build](#2-steps-build) combined.
 
 **Single step build** involves only `Dockerfile`, so you can omit `-f` directive of `docker image build` command.
 
