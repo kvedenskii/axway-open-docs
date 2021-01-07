@@ -333,13 +333,11 @@ docker container run \
 
 As API Portal container runs as a non-root user, make sure that mounted directories are readable and writable by user with id `1048`. This user is not required to exist on the host machine though.
 
-## Alternative configuration using volumes
+## Configure Docker volumes using certificates
 
-You can use volumes to set some configurations. This type of configuration overrides values from previously set environment variables.
+You can use volumes to set some configurations, but note that this type of configuration overrides values from previously set environment variables.
 
-### Certificates
-
-You can mount certificate files directly to container. Inside the container they are placed in the following locations:
+Certificate files are placed in the following locations inside the container:
 
 ```
 /opt/axway/apiportal/certs/

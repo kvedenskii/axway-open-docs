@@ -3,26 +3,24 @@
   "linkTitle": "Build using Dockerfile",
   "weight": "40",
   "date": "2019-08-09",
-  "description": "Build an API Portal Docker image using the `Dockerfile` in the sample package."
+  "description": "Build an API Portal Docker image using the Dockerfile available in the sample package."
 }
-
-This section describes how to build an API Portal Docker image using the `Dockerfile` in the sample package.
 
 MySQL image is not included with the API Portal Docker sample package. You must download it separately from [Docker Hub](https://hub.docker.com/).
 
 ## Prerequisites
 
-* [Docker engine](https://docs.docker.com/engine/)
-* API Portal Docker sample package, available from [Axway Support](https://support.axway.com)
-* MySQL server
+* [Docker engine](https://docs.docker.com/engine/).
+* API Portal Docker sample package, available from [Axway Support](https://support.axway.com).
+* MySQL server.
 
-In order to build API Portal image you need a running MySQL server. During the build process a new database will be created. It will be deleted automatically when the build is over.
+A running MySQL server is required to build API Portal image. During the build process, a new database is created, and it is deleted automatically when the build is finished.
 
-## API Portal Docker sample package
+## Download API Portal Docker sample package
 
-You can download the API Portal Docker sample package from Axway Support at [https://support.axway.com](https://support.axway.com/).
+You can download the API Portal Docker sample package from [Axway Support](https://support.axway.com/).
 
-The package structure is following:
+The package structure is as follows:
 
 ```
 ├── dockerfiles/          - 2-steps build dockerfiles
@@ -40,12 +38,18 @@ The package structure is following:
 └── sample.env            - sample environment variables file
 ```
 
-## 2-steps build
+## Build your image with Two-Step build
 
-API Portal docker image build involves multiple build stages. Virtually we can split them into 2 steps:
+You can build your API Portal docker image following a Two-Step build:
 
-* Build API Portal infrastructure image with all the software API Portal runtime relies on.
-* Extend API Portal infrastructure image with API Portal software.
+1. Build API Portal base image with all the software API Portal runtime relies on.
+2. Extend API Portal base image with API Portal software.
+
+<!--
+API Portal docker image build involves multiple build stages, which can be split in 2 steps:
+
+1. Build API Portal infrastructure image with all the software API Portal runtime relies on.
+2. Extend API Portal infrastructure image with API Portal software.
 
 The goal of [2-steps build](#2-steps-build) is to build and capture the first step and install API Portal on top of it with the second step. Thus, we can reuse image from the first step multiple times for newer API Portal versions.
 
@@ -53,19 +57,20 @@ The goal of [2-steps build](#2-steps-build) is to build and capture the first st
 
 * `dockerfiles/base.Dockerfile`
 * `dockerfiles/web.Dockerfile`
+-->
 
-### Build base image
+To build the base image, run the following command using the `dockerfiles/base.Dockerfile`:
 
 ```
 docker image build -t <base-image-tag> \
   -f dockerfiles/base.Dockerfile <docker-build-context-directory>
 ```
 
-### Build API Portal image from base
+Now, build API Portal image from the base image using the `dockerfiles/web.Dockerfile`:
 
 ```
 docker image build -t <apiportal-image-tag> \
-  --build-arg APIPORTAL_BASE_IMG=<base-image-tag> \
+  --build-arg APIPORTAL_BASE_IMG=<base-image-tag> \   # Base image name. Used only with Two-Step build.
   --build-arg MYSQL_HOST=<mysql-build-host> \
   --build-arg MYSQL_PORT=<mysql-build-host-port> \
   --build-arg MYSQL_DATABASE=<mysql-build-host-db-name> \
@@ -76,13 +81,15 @@ docker image build -t <apiportal-image-tag> \
   -f dockerfiles/web.Dockerfile <docker-build-context-directory>
 ```
 
-## Single step build
+## Build your image with a Single-Step build
 
-In contrast with the [2-steps build](#2-steps-build), **single step build** process happens in one command and produces only 1 tagged image. It's nothing more than both steps from [2-steps build](#2-steps-build) combined.
+You can also build API Portal docker image following a Single-Step, but in this case, it will only produce one tagged image, so you will not have a base image to reuse later.
 
-**Single step build** involves only `Dockerfile`, so you can omit `-f` directive of `docker image build` command.
+<!-- 
+In contrast with the [2 steps build](#2-steps-build), **single step build** process happens in one command and produces only 1 tagged image. **Single step build** involves only `Dockerfile`, so you can omit `-f` directive of `docker image build` command. 
+-->
 
-### Build API Portal image
+To build API Portal docker image following a Single-Step build, run the following command:
 
 ```
 docker image build -t <apiportal-image-tag> \
@@ -96,23 +103,20 @@ docker image build -t <apiportal-image-tag> \
   <docker-build-context-directory>
 ```
 
-## Build arguments
+The Two-Step build does not expect any arguments, but for the Single-Step build the following arguments are used:
 
-The first build step in the [2 steps build](#2-steps-build) doesn't expect any arguments. For the second build step or single step build the following arguments are used:
-
-* `APIPORTAL_BASE_IMG` - base image name, can be used only with [2-steps build](#2-steps-build).
-* `MYSQL_HOST` (required) - MySQL host for building API Portal image. It's required in order API Portal to create initial database dump file only.
+* `MYSQL_HOST` (required) - API Portal uses this MySQL host to create the initial database dump file.
 * `MYSQL_PORT` (required) - MySQL server port.
-* `MYSQL_DATABASE` (required) - database name. If this database exists on the server it will be reset, if it doesn't exist it will be created. MySQL user should have privileges to create and drop this database.
+* `MYSQL_DATABASE` (required) - Database name. If this database exists on the server it will be reset, if it does not exist yet, it will be created. Ensure that MySQL user has privileges to create and drop this database.
 * `MYSQL_USER` (required) - MySQL user.
 * `MYSQL_PASSWORD` (required) - MySQL user password.
-* `THE_UID` and `THE_GID` (optional) - change default group ID and user ID of the Apache user inside the container. Default is 1048 for both. Be reasonable with these values, in general values lower than 1000 are **not** recommended.
+* `THE_UID` and `THE_GID` (optional) - This changes the default group ID and user ID of the Apache user inside the container. Defaults to `1048` for both. Values lower than `1000` are **not** recommended.
 
-Only `MYSQL_*` arguments are required. API Portal docker image can't be build without MySQL connection.
+Only `MYSQL_*` arguments are required. API Portal docker image cannot be build without MySQL connection.
 
-## Demo
+## Two-Step and Single-Step scripts
 
-2-steps build:
+The following is an example of a Two-Step build script:
 
 ```
 # build base image
@@ -131,7 +135,7 @@ docker image build -t axway/apiportal:X.X.X \
   -f dockerfiles/web.Dockerfile .
 ```
 
-Single step build:
+The following is an example of a Single-Step build script:
 
 ```
 docker image build -t axway/apiportal:X.X.X \

@@ -3,76 +3,61 @@
   "linkTitle": "Run using Docker Compose",
   "weight": "50",
   "date": "2021-01-05",
-  "description": "Run an API Portal using `docker-compose.yml` in the sample package."
+  "description": "Run API Portal Docker container with Docker Compose tool using the sample `docker-compose.yml`."
 }
-
-This section describes how to run API Portal Docker container with Docker Compose tool using sample `docker-compose.yml`.
-
-Docker Compose is a simple way to run the whole API Portal solution with a single command.
-
 ## Requirements
 
-* [Docker engine](https://docs.docker.com/engine/)
-* [Docker Compose](https://docs.docker.com/compose/)
-* API Portal Docker image, available from [Axway Support](https://support.axway.com)
-* API Portal Docker sample package, available from [Axway Support](https://support.axway.com)
+* [Docker Engine](https://docs.docker.com/engine/).
+* [Docker Compose](https://docs.docker.com/compose/).
+* API Portal Docker image, available from [Axway Support](https://support.axway.com).
+* API Portal Docker sample package, available from [Axway Support](https://support.axway.com).
 
-## What is included
+## About Docker Compose
 
-In the `docker-compose.yml` file provided in the API Portal Docker sample package we provide following services preconfigured:
+Docker Compose is a simple way to run the whole API Portal solution with a single command. By using the `docker-compose.yml` file, provided with the API Portal Docker sample package, you get the following services preconfigured, ready to be used with API Portal:
 
 * MariaDB
 * Redis
 * API Portal
 
-I.e. by running this configuration you don't need to worry about MariaDB and Redis installation and configuration, they are ready to be used with API Portal out of the box.
+The `docker-compose.yml` file does not include API Manager and ClamAV configurations, you must configure them in API Portal separately. While API Manager is required for you to leverage your API Portal, ClamAV is an optional security tool.
 
-## What is not included
+`docker-compose.yml` available in this package is for demo purpose only, but you can modify it up to your needs.
 
-The `docker-compose.yml` file doesn't include API Manager and ClamAV configurations. You can set them up and configure in API Portal separately. API Portal can't serve its purpose without API Manager, but ClamAV is a completely optional security tool.
+You can also modify the `sample.env` file, or replace it with your own in the `env_file` section, under `apiportal` service.
 
-## Simple deployment example
+## Deploy with docker-compose.yml
 
-### Edit docker-compose.yml
+To use `docker-compose.yml` to deploy your API Portal in containers:
 
-Open `docker-compose.yml` file in an editor and locate there `image` section under `apiportal` service. Change the value to the name of your API Portal docker image.
+1. Open `docker-compose.yml` file in an editor and locate the `image` section under `apiportal` service. Then, change the value to the name of your API Portal docker image.
 
-```
-# ...
-services:
-# ...
-  apiportal:
-    image: <your-api-portal-image>
-```
+    ```
+    # ...
+    services:
+    # ...
+      apiportal:
+        image: <your-api-portal-image>
+    ```
 
-### Start the services
+2. Run the following command to start the services, and wait API Portal service to get loaded:
 
-Run
+    ```
+    docker-compose up -d
+    ```
 
-```
-docker-compose up -d
-```
+    You can check the status of the load with the following command:
 
-and wait API Portal service to get loaded. You can check readiness with the following command:
+    ```
+    docker-compose ps apiportal
+    ```
 
-```
-docker-compose ps apiportal
-```
+When `Up (healthy)` is show under the **State** column, it means that API Portal is ready to handle requests.
 
-When you see `Up (healthy)` under **State** column it means API Portal is ready to handle requests.
+If API Portal container does not become available within 30 seconds after you run the `up` command, check the logs for issues.
 
-If API Portal container doesn't become available within 30 seconds after `up` command, check logs for issues with the command:
+To check the logs, run:
 
 ```
 docker-compose logs apiportal
 ```
-
-## Editing docker-compose.yml
-
-`docker-compose.yml` in this package is for demo purpose only. You can modify it up to your needs. You can also modify [`sample.env`](sample.env) file or replace it with your own one in `env_file` section under `apiportal` service.
-
-Some useful links:
-
-* [Compose file reference](https://docs.docker.com/compose/compose-file/)
-* [Environment variables in Compose](https://docs.docker.com/compose/environment-variables/)
-* [Use Compose in production](https://docs.docker.com/compose/production/)
