@@ -28,15 +28,15 @@ The following are the recommended hardware disk space and memory requirements fo
 * 100 GB or more disk space
 * 8 GB or more RAM
 
-## API Portal image self-documentation
+## Access API Portal Docker image self-documentation
 
-To see API Portal image help message run:
+To see the Docker image help, run the following command:
 
 ```
 docker container run --rm <apiportal-image-tag> --help
 ```
 
-To see available environment variables list run:
+To list the environment variables available in the Docker image, run the following command:
 
 ```
 docker container run --rm <apiportal-image-tag> --env
@@ -73,17 +73,17 @@ API Portal is now running in a Docker container.
 
 To access your API Portal, you must first link it to your API Manager. For more details, see [Connect API Portal to API Manager](/docs/apim_installation/apiportal_install/connect_to_apimgr/).
 
-If you plan to configure API Manager with environment variables, you must first [install API Manager and API Gateway](/docs/apim_installation/apigtw_install/) on-premise or in containers before you deploy API Portal in containers.
+If you plan to configure API Manager with environment variables, you must [install API Manager and API Gateway](/docs/apim_installation/apigtw_install/) on-premise or in containers before you deploy API Portal in containers.
 
-## Exposed port
+{{% alert title="Note" %}}
+API Portal Docker container exposes `80` and `443` Apache ports. Port `443` is used only when SSL in Apache is configured.
+{{% /alert %}}
 
-API Portal docker container exposes `80` and `443` Apache ports. Port `443` is used only when SSL in Apache is configured.
-
-## Use environment variables to configure API Portal runtime
+## Configure API Portal runtime with environment variables
 
 API Portal container supports a wide range of environment variables that allows you to configure API Portal runtime and Joomla! Administrator Interface (JAI) settings, partially.
 
-The following is an example that you can copy and paste to an `env` file, then edit the values, and use the `env` file with `docker run` command:
+The following is an example that you can copy and paste to an `env` file, then edit the values and use the `env` file with `docker run` command:
 
 ```
 ##### NOTE #####
@@ -335,7 +335,7 @@ As API Portal container runs as a non-root user, make sure that mounted director
 
 ## Alternative configuration using volumes
 
-Some configurations can be done using volumes. This type of configuration overrides values from previously set environment variables.
+You can use volumes to set some configurations. This type of configuration overrides values from previously set environment variables.
 
 ### Certificates
 
@@ -352,7 +352,7 @@ You can mount certificate files directly to container. Inside the container they
     └── mysql-client-key.pem
 ```
 
-#### Demo
+The following example uses `APACHE_SSL_ON` and `MYSQL_SSL_ON` environment variables to instruct the container to enable SSL in Apache and MySQL, then it mounts the certificate files.
 
 ```
 docker container run <some-options> \
@@ -366,9 +366,7 @@ docker container run <some-options> \
   axway/apiportal:X.X.X
 ```
 
-Here we use `APACHE_SSL_ON` and `MYSQL_SSL_ON` environment variable to instruct the container to enable SSL in Apache and MySQL and then mount certificate files.
-
-You can mix certificates in mounted files and environment variables. Just keep in mind that values from mounted certificate files override the ones from environment variables.
+You can mix certificates in mounted files and environment variables, but note that values from mounted certificate files override the ones from environment variables.
 
 ```
 docker container run <some-options> \
@@ -378,7 +376,7 @@ docker container run <some-options> \
   axway/apiportal:X.X.X
 ```
 
-You can simplify the process creating the following file structure under a directory of your choice, for example `${HOME}/certs`:
+You can simplify the process by creating the following file structure under a directory of your choice, for example `${HOME}/certs`:
 
 ```
 ${HOME}/certs/
@@ -391,7 +389,7 @@ ${HOME}/certs/
     └── mysql-client-key.pem
 ```
 
-Make sure you named files exactly as they are expected inside the container! Now you can configure using certificates by mounting the whole `"${HOME}/certs` directory:
+Ensure that you named the files exactly as they are expected inside the container. Now, you can configure the container using certificates by mounting the whole `"${HOME}/certs` directory:
 
 ```
 docker container run <some-options> \
