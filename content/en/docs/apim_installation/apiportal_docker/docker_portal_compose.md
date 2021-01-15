@@ -3,7 +3,7 @@
   "linkTitle": "Run using Docker Compose",
   "weight": "50",
   "date": "2021-01-05",
-  "description": "Run API Portal Docker container with Docker Compose tool using the sample `docker-compose.yml`."
+  "description": "Run API Portal Docker container with Docker Compose tool using the `docker-compose.yml` sample."
 }
 ## Requirements
 
@@ -14,15 +14,13 @@
 
 ## About Docker Compose
 
-Docker Compose is a simple way to run the whole API Portal solution with a single command. By using the `docker-compose.yml` file, provided with the API Portal Docker sample package, you get the following services preconfigured, ready to be used with API Portal:
+Docker Compose is a simple way to run the whole API Portal solution with a single command. By using the `docker-compose.yml` file, provided with the API Portal Docker sample package, you get the following services preconfigured:
 
 * MariaDB
 * Redis
 * API Portal
 
-The `docker-compose.yml` file does not include API Manager and ClamAV configurations, you must configure them in API Portal separately. While API Manager is required for you to leverage your API Portal, ClamAV is an optional security tool.
-
-`docker-compose.yml` available in this package is for demo purpose only, but you can modify it up to your needs.
+The `docker-compose.yml` file does not include API Manager and ClamAV configurations, you must configure them in API Portal separately. While API Manager is required for you to leverage your API Portal, ClamAV is an optional security tool. `docker-compose.yml` available in this package is for demo purpose only. Before you use it for production, you must modify all sensitive data at a minimum.
 
 You can also modify the `sample.env` file, or replace it with your own in the `env_file` section, under `apiportal` service.
 

@@ -3,7 +3,7 @@
 "linkTitle":"Run using ready-made Docker image",
 "weight":"20",
 "date":"2019-08-09",
-"description":"Use the ready-made API Portal Docker image to run in Docker containers."
+"description":"Use the ready-made API Portal Docker image to run your API Portal in Docker containers."
 }
 
 This topic describes how to use the ready-made API Portal Docker image to run in Docker containers. The image is ready out-of-the-box, so you do not have to build it using the `Dockerfile`.
@@ -92,8 +92,8 @@ The following is an example that you can copy and paste to an `env` file, then e
 ################
 
 ##### REQUIRED SETTINGS #####
-# This configuration settings are required for API Portal
-# docker container to boot.
+# This configuration settings are required
+# for API Portal docker container to boot.
 #############################
 
 MYSQL_HOST=
@@ -103,7 +103,7 @@ MYSQL_USER=
 MYSQL_PASSWORD=
 
 ##### OPTIONAL SETTINGS #####
-# The rest of configuration settings are optional.
+# The rest of this configuration settings are optional.
 #############################
 # Certificates can be passed in plain text or as base64 encoded string.
 # For base64 encoded values prepend them with `base64:`
@@ -130,7 +130,7 @@ APACHE_SSL_PRIVATE_KEY=
 # under "Install and configure database server" page in API Portal docs
 #
 # Two-way (mutual) authentication will be configured only when all three
-# certificates are provided. Otherwise one-way (Server CA) authentication
+# certificates are provided. Otherwise, one-way (Server CA) authentication
 # will be used
 #
 # `MYSQL_SSL_VERIFY_CERT` is boolean
@@ -141,19 +141,19 @@ MYSQL_SSL_CLIENT_CERT=
 MYSQL_SSL_CLIENT_KEY=
 MYSQL_SSL_VERIFY_CERT=1
 
-##### CHANGABLE SETTINGS #####
+##### CHANGEABLE SETTINGS #####
 # The rest of configuration settings can be configured in JAI as well.
 #
-# `*_CONFIGURED` option determins if the feature is configured with
-# environment variables, for example `APIMANAGER_CONFIGURED=0` means
+# `*_CONFIGURED` option determines whether the feature is configured with
+# environment variables. For example `APIMANAGER_CONFIGURED=0` means
 # that the rest of `APIMANAGER_*` variables won't effect the runtime.
-# On the other hand `APIMANAGER_CONFIGURED=1` will configure API Manager
+# On the other hand, `APIMANAGER_CONFIGURED=1` will configure API Manager
 # with values from environment variables.
 #
-# !!! With `*_CONFIGURED` option set to 1 all the changes made in JAI will be
-# overriden by values from environment variables on the container restart
+# !!! If you set `*_CONFIGURED=1`, all the changes made in JAI will be
+# overridden by values from environment variables on the container restart
 #
-# `*_ON` option determins whether the feature is enabled or not
+# `*_ON` option determines whether the feature is enabled.
 ##############################
 
 #####
@@ -169,7 +169,7 @@ APIMANAGER_PORT=8075
 # For reference see "Customize Try-it by type of request"
 # under "Customize API Catalog" page in API Portal docs.
 #
-# All `TRYIT_METHODS_*` vars are boolean
+# All `TRYIT_METHODS_*` variables are boolean
 #####
 TRYIT_METHODS_CONFIGURED=0
 TRYIT_METHODS_ENABLE_GET=1
@@ -197,7 +197,7 @@ API_INFORMATION_SOURCE_CONFIGURED=0
 API_INFORMATION_SOURCE_NAME=summary
 
 #####
-# `MONITORING_MONTH_RANGE_VALUE` is an integer in 2 to 6 range
+# `MONITORING_MONTH_RANGE_VALUE` is an integer, which range is 2 to 6
 #####
 MONITORING_MONTH_RANGE_CONFIGURED=0
 MONITORING_MONTH_RANGE_VALUE=2
@@ -260,8 +260,8 @@ API_WHITELIST_CONFIGURED=0
 API_WHITELIST=
 
 ##### NON PERSISTING SETTINGS #####
-# Settings under this section don't persist. I.e. if you configure
-# it in JAI they will be gone after container restart. So in common
+# Settings under this section don't persist. If you configure
+# it in JAI they will be gone after container restart. So, in a common
 # use case they should be configured via environment variables.
 ###################################
 
@@ -287,55 +287,9 @@ docker container run --env-file .env \
 
 Note that inline environment variables take precedence over variables from the `env` file. So, in this example, `very_secret_password` and certificate taken from `apiportal.key` file will override the password and certificate in the `.env` file.
 
-## Create data volumes to persist data
+### Configure certificates using volumes
 
-By default, API Portal container does not create volumes for data persistence. But, you might want to create Docker data volumes to persist API Portal customization data, prevent data loss when the container reboots or crashes, or when you are upgrading or setting up HA for an API Portal Docker deployment. If you are running API Portal in containers for a demo or test, there is no need to create data volumes.
-
-The data volumes are stored in the Docker host machine, and as such they consume disk space. So, we recommend you to delete unused data volumes regularly.
-
-The following list describes which API Portal assets you should store in a Docker volume to preserve the customizations during upgrade or HA setup of an API Portal Docker deployment:
-
-* `/opt/axway/apiportal/enckey` - Encryption key directory. Used by Public API mode.
-* `/opt/axway/apiportal/htdoc/images` - Images uploaded by API Portal users or Admins.
-* `/opt/axway/apiportal/htdoc/language` - API Portal translations.
-* `/opt/axway/apiportal/htdoc/templates` - Joomla! templates.
-* `/opt/axway/apiportal/htdoc/administrator/language` - Joomla! admin panel translations.
-* `/opt/axway/apiportal/htdoc/administrator/components/com_apiportal/assets/cert` - Certificates for API Manager.
-
-Do not modify the content of the following folders, as they will be overwritten during upgrade:
-
-* `/opt/axway/apiportal/htdoc/templates/purity_iii`
-* `/opt/axway/apiportal/htdoc/language/en-GB`
-* `/opt/axway/apiportal/htdoc/language/overrides`
-* `/opt/axway/apiportal/htdoc/administrator/language`
-
-The following is an example of how you can create data volumes:
-
-```
-# create volumes
-docker volume create apiportal-enckey
-docker volume create apiportal-images
-docker volume create apiportal-language
-docker volume create apiportal-templates
-docker volume create apiportal-adm-language
-docker volume create apiportal-certs
-
-# start API Portal container using the created volumes
-docker container run \
-  -v apiportal-enckey:/opt/axway/apiportal/enckey \
-  -v apiportal-images:/opt/axway/apiportal/htdoc/images \
-  -v apiportal-language:/opt/axway/apiportal/htdoc/language \
-  -v apiportal-templates:/opt/axway/apiportal/htdoc/templates \
-  -v apiportal-adm-language:/opt/axway/apiportal/htdoc/administrator/language \
-  -v apiportal-certs:/opt/axway/apiportal/htdoc/administrator/components/com_apiportal/assets/cert \
-  <more-options>
-```
-
-As API Portal container runs as a non-root user, make sure that mounted directories are readable and writable by user with id `1048`. This user is not required to exist on the host machine though.
-
-## Configure Docker volumes using certificates
-
-You can use volumes to set some configurations, but note that this type of configuration overrides values from previously set environment variables.
+Besides configuring certificates with environment variables, alternatively you can use volumes. This type of configuration overrides values from previously set environment variables.
 
 Certificate files are placed in the following locations inside the container:
 
@@ -395,3 +349,49 @@ docker container run <some-options> \
   -v "${HOME}/certs":/opt/axway/apiportal/certs:ro \
   axway/apiportal:X.X.X
 ```
+
+## Create data volumes to persist data
+
+By default, API Portal container does not create volumes for data persistence. But, you might want to create Docker data volumes to persist API Portal customization data, prevent data loss when the container reboots or crashes, or when you are upgrading or setting up HA for an API Portal Docker deployment. If you are running API Portal in containers for a demo or test, there is no need to create data volumes.
+
+The data volumes are stored in the Docker host machine, and as such they consume disk space. So, we recommend you to delete unused data volumes regularly.
+
+The following list describes which API Portal assets you should store in a Docker volume to preserve the customizations during upgrade or HA setup of an API Portal Docker deployment:
+
+* `/opt/axway/apiportal/enckey` - Encryption key directory. Used by Public API mode.
+* `/opt/axway/apiportal/htdoc/images` - Images uploaded by API Portal users or Admins.
+* `/opt/axway/apiportal/htdoc/language` - API Portal translations.
+* `/opt/axway/apiportal/htdoc/templates` - Joomla! templates.
+* `/opt/axway/apiportal/htdoc/administrator/language` - Joomla! admin panel translations.
+* `/opt/axway/apiportal/htdoc/administrator/components/com_apiportal/assets/cert` - Certificates for API Manager.
+
+Do not modify the content of the following folders, as they will be overwritten during upgrade:
+
+* `/opt/axway/apiportal/htdoc/templates/purity_iii`
+* `/opt/axway/apiportal/htdoc/language/en-GB`
+* `/opt/axway/apiportal/htdoc/language/overrides`
+* `/opt/axway/apiportal/htdoc/administrator/language`
+
+The following is an example of how you can create data volumes:
+
+```
+# create volumes
+docker volume create apiportal-enckey
+docker volume create apiportal-images
+docker volume create apiportal-language
+docker volume create apiportal-templates
+docker volume create apiportal-adm-language
+docker volume create apiportal-certs
+
+# start API Portal container using the created volumes
+docker container run \
+  -v apiportal-enckey:/opt/axway/apiportal/enckey \
+  -v apiportal-images:/opt/axway/apiportal/htdoc/images \
+  -v apiportal-language:/opt/axway/apiportal/htdoc/language \
+  -v apiportal-templates:/opt/axway/apiportal/htdoc/templates \
+  -v apiportal-adm-language:/opt/axway/apiportal/htdoc/administrator/language \
+  -v apiportal-certs:/opt/axway/apiportal/htdoc/administrator/components/com_apiportal/assets/cert \
+  <more-options>
+```
+
+As API Portal container runs as a non-root user, you must ensure that mounted directories are readable and writable by user with id `1048`. This user is not required to exist on the host machine though.
