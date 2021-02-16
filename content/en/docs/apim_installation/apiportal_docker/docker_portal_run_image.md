@@ -8,6 +8,8 @@
 
 This topic describes how to use the ready-made API Portal Docker image to run in Docker containers. The image is ready out-of-the-box, so you do not have to build it using the `Dockerfile`.
 
+{{< alert title="Note" color="primary" >}} Docker images released before version 7.7.20201130 are not production ready and not recommended to be used in production environment. {{< /alert >}}
+
 ## Prerequisites
 
 The following components are required on your system before you can deploy API Portal in Docker containers:
