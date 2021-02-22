@@ -21,9 +21,25 @@ To install API Portal in unattended mode by entering all the script options in t
    ```
 4. Run the installation script with the appropriate options. For example:
 
-   ```
-   ./apiportal_install.sh --mysql-ssl=n --install-path="/opt/axway/apiportal/htdoc" --mysql-database=joomla --mysql-host=localhost --mysql-port=3306 --mysql-username=apiportal --mysql-password=password --mysql-encrypt-password=y --mysql-password-passphrase=passphrase --weak-mysql-password=y --initial-ha-instance=n --php-ini="/etc/" --apache-config="/etc/httpd/conf.d/" --use-encryption-key=n --use-ssl=y --ssl-type=2 --restart-apache=y
-   ```
+    ```shell
+    ./apiportal_install.sh --mysql-ssl=n --install-path="/opt/axway/apiportal/htdoc" \
+      --mysql-database=joomla --mysql-host=localhost --mysql-port=3306 \
+      --mysql-username=apiportal --mysql-password=password --mysql-encrypt-password=y \
+      --mysql-password-passphrase=passphrase --weak-mysql-password=y \
+      --initial-ha-instance=n --php-ini="/etc/" --apache-config="/etc/httpd/conf.d/" \
+      --use-encryption-key=n --use-ssl=y --ssl-type=2 --restart-apache=y
+    ```
+
+Options can be used in both `--option=value` and `--option value` formats. The above command can be altered with the following:
+
+```shell
+./apiportal_install.sh --mysql-ssl n --install-path "/opt/axway/apiportal/htdoc" \
+  --mysql-database joomla --mysql-host localhost --mysql-port 3306 \
+  --mysql-username apiportal --mysql-password password --mysql-encrypt-password y \
+  --mysql-password-passphrase passphrase --weak-mysql-password y \
+  --initial-ha-instance n --php-ini "/etc/" --apache-config "/etc/httpd/conf.d/" \
+  --use-encryption-key n --use-ssl y --ssl-type 2 --restart-apache y
+```
 
 For more information about the options used with the script, see [Scripts reference](#scripts-reference).
 
@@ -181,7 +197,7 @@ Example:
 ./apiportal_install.sh --optionfile=options.conf
 ```
 
-```
+```shell
 # uninstall API Portal
 ./apiportal_uninstall.sh --optionfile=options.conf
 ```
